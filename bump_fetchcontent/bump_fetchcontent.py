@@ -106,6 +106,7 @@ def main():
     try:
         ref = repo.git.symbolic_ref("refs/remotes/origin/HEAD")
         default_branch = ref.strip().split("/")[-1]
+        print(f"Detected default branch: {default_branch}")
     except Exception as e:
         print(f"Warning: Failed to detect default branch, defaulting to 'main': {e}")
         default_branch = "main"
