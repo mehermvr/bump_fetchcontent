@@ -33,7 +33,7 @@ jobs:
   bump-fetchcontent:
     runs-on: ubuntu-latest
     steps:
-      - uses: mehermvr/bump_fetchcontent@master
+      - uses: mehermvr/bump_fetchcontent@v0.0.1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           ignore_prereleases: 'true'  # default behavior
