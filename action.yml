@@ -4,6 +4,10 @@ inputs:
   github_token:
     description: 'GitHub token with repo permissions.'
     required: true
+  ignore_prereleases:
+    description: 'Ignore pre-release versions like RC, alpha, beta. Default: true'
+    required: false
+    default: 'true'
 runs:
   using: 'composite'
   steps:
@@ -26,3 +30,4 @@ runs:
         python -m bump_fetchcontent.bump_fetchcontent
       env:
         INPUT_GITHUB_TOKEN: ${{ inputs.github_token }}
+        INPUT_IGNORE_PRERELEASES: ${{ inputs.ignore_prereleases }}

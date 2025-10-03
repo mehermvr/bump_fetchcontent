@@ -42,11 +42,13 @@ def parse_fetchcontent_declare_blocks(text):
                 "version": version.group(1)
             }
             
-def get_newest_version_from_list(entries):
+def get_newest_version_from_list(entries, ignore_prereleases):
     newest = None
     for entry in entries:
         tag = entry.get("tag_name") or entry.get("name")
         if not tag:
+            continue
+        if ignore_prereleases and re.search(r"(rc|alpha|beta)", tag, re.IGNORECASE):
             continue
         vstr = tag.lstrip("v")
         try:
@@ -57,7 +59,7 @@ def get_newest_version_from_list(entries):
             newest = tag
     return newest
 
-def get_latest_github_release(url):
+def get_latest_github_release(url, ignore_prereleases=True):
     m = re.match(
         r".*github.com/([^/]+)/([^/]+)/archive/refs/tags/(v?[\d\.]+)\.tar\.gz", url)
     if not m:
@@ -69,10 +71,10 @@ def get_latest_github_release(url):
         tags = r.json()
         if not tags:
             return None
-        return get_newest_version_from_list(tags)
+        return get_newest_version_from_list(tags, ignore_prereleases=ignore_prereleases)
     return None
 
-def get_latest_gitlab_release(url):
+def get_latest_gitlab_release(url, ignore_prereleases=True):
     m = re.match(
         r".*gitlab.com/([^/]+)/([^/]+)/-/(?:archive|releases)/([\d\.]+)/", url)
     if not m:
@@ -84,6 +86,6 @@ def get_latest_gitlab_release(url):
         releases = r.json()
         if not releases:
             return None
-        return get_newest_version_from_list(releases)
+        return get_newest_version_from_list(releases, ignore_prereleases=ignore_prereleases)
     return None
 

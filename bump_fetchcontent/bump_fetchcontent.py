@@ -40,6 +40,9 @@ def replace_versions_in_file(file: Path, changes):
     file.write_text(content)
 
 def main():
+    ignore_prereleases_str = os.getenv("INPUT_IGNORE_PRERELEASES", "true").lower()
+    ignore_prereleases = ignore_prereleases_str in ("true", "1", "yes")
+
     token = os.getenv("INPUT_GITHUB_TOKEN")
     repo_dir = os.getenv("GITHUB_WORKSPACE")
 
@@ -64,9 +67,9 @@ def main():
         file_changes = []
         for block in parse_fetchcontent_declare_blocks(content):
             if "github.com" in block["url"]:
-                latest = get_latest_github_release(block["url"])
+                latest = get_latest_github_release(block["url"], ignore_prereleases=ignore_prereleases)
             elif "gitlab.com" in block["url"]:
-                latest = get_latest_gitlab_release(block["url"])
+                latest = get_latest_gitlab_release(block["url"], ignore_prereleases=ignore_prereleases)
             else:
                 latest = None
             if latest and is_newer_version(block["version"], latest):
