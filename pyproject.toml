@@ -14,5 +14,4 @@ dependencies = [
     "PyGithub",
     "packaging",
     "GitPython",
-    "typer"
 ]

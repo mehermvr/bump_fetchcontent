@@ -101,10 +101,19 @@ def main():
         return 1
     owner, repo_name = parts[-2], parts[-1]
 
+    # Determine default branch name
+    default_branch = None
+    try:
+        ref = repo.git.symbolic_ref("refs/remotes/origin/HEAD")
+        default_branch = ref.strip().split("/")[-1]
+    except Exception as e:
+        print(f"Warning: Failed to detect default branch, defaulting to 'main': {e}")
+        default_branch = "main"
+
     pr_data = {
         "title": "Bump FetchContent dependencies",
         "head": branch,
-        "base": "main",
+        "base": default_branch,
         "body": pr_body,
     }
     headers = {"Authorization": f"token {token}"}
