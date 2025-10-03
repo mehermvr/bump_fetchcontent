@@ -12,10 +12,12 @@ runs:
       with:
         python-version: '3.x'
     - name: Install package with dependencies from pyproject.toml
+      shell: bash
       run: |
         python -m pip install --upgrade pip setuptools wheel
         pip install .
     - name: Run bump_fetchcontent
+      shell: bash
       run: python -m bump_fetchcontent.bump_fetchcontent
       env:
         INPUT_GITHUB_TOKEN: ${{ inputs.github_token }}
