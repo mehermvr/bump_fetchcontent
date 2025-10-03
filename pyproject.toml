@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bump_fetchcontent"
+version = "0.0.1"
+description = "Update CMake FetchContent_Declare dependencies with new releases"
+authors = [
+  { name = "mehermvr", email = "rm.meher97@gmail.com" }
+]
+dependencies = [
+    "requests",
+    "PyGithub",
+    "packaging",
+    "GitPython",
+    "typer"
+]
