@@ -14,6 +14,14 @@ from bump_fetchcontent.core import (
 )
 
 
+def get_default_branch_from_github(owner, repo_name, token):
+    api_url = f"https://api.github.com/repos/{owner}/{repo_name}"
+    headers = {"Authorization": f"token {token}"}
+    resp = requests.get(api_url, headers=headers, timeout=10)
+    if resp.ok:
+        return resp.json().get("default_branch", "main")
+    return "main"
+
 def replace_versions_in_file(file: Path, changes):
     content = file.read_text()
     for _, _, _, old_url, new_url in changes:
@@ -101,15 +109,8 @@ def main():
         return 1
     owner, repo_name = parts[-2], parts[-1]
 
-    # Determine default branch name
-    default_branch = None
-    try:
-        ref = repo.git.symbolic_ref("refs/remotes/origin/HEAD")
-        default_branch = ref.strip().split("/")[-1]
-        print(f"Detected default branch: {default_branch}")
-    except Exception as e:
-        print(f"Warning: Failed to detect default branch, defaulting to 'main': {e}")
-        default_branch = "main"
+    default_branch = get_default_branch_from_github(owner, repo_name, token)
+    print(f"Detected default branch: {default_branch}")
 
     pr_data = {
         "title": "Bump FetchContent dependencies",
