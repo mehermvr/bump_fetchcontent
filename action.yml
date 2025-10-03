@@ -7,17 +7,22 @@ inputs:
 runs:
   using: 'composite'
   steps:
+    - name: Checkout repository content
+      uses: actions/checkout@v4
     - name: Setup Python 3.x
       uses: actions/setup-python@v5
       with:
         python-version: '3.x'
-    - name: Install package with dependencies from pyproject.toml
+    - name: Install package dependencies
       shell: bash
       run: |
+        cd $GITHUB_ACTION_PATH
         python -m pip install --upgrade pip setuptools wheel
         pip install .
     - name: Run bump_fetchcontent
       shell: bash
-      run: python -m bump_fetchcontent.bump_fetchcontent
+      run: |
+        cd $GITHUB_ACTION_PATH
+        python -m bump_fetchcontent.bump_fetchcontent
       env:
         INPUT_GITHUB_TOKEN: ${{ inputs.github_token }}
