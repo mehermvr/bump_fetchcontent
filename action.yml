@@ -1,5 +1,5 @@
 name: 'Bump FetchContent'
-description: 'Automatically bump FetchContent dependencies, commit, push, and open a PR.'
+description: 'Automatically bump CMake FetchContent dependencies.'
 inputs:
   github_token:
     description: 'GitHub token with repo permissions.'
