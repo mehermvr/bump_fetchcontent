@@ -42,3 +42,9 @@ jobs:
 ## Inputs
 - `github_token` (required): Should be available by default. Needed for making a PR if required.
 - `ignore_prereleases` (optional): Skips pre-release versions like alpha, rc, or beta. Default is "true".
+
+## Dry run
+
+You can dry run the changes on your repo by using the file `dry_run.py`.
+It takes a single argument which is your repository git url.
+It'll clone the repo into a temp folder and check for version updates if any.
