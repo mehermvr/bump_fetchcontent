@@ -1,5 +1,8 @@
 name: 'Bump FetchContent'
 description: 'Automatically bump CMake FetchContent dependencies.'
+branding:
+  icon: "package"
+  color: "purple"
 inputs:
   github_token:
     description: 'GitHub token with repo permissions.'
