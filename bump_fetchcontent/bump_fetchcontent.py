@@ -14,6 +14,17 @@ from bump_fetchcontent.core import (
 )
 
 
+def get_unique_branch_name(repo, base_name="bump-fetchcontent"):
+    origin = repo.remote("origin")
+    origin.fetch()
+    existing_branches = {ref.remote_head for ref in repo.remote().refs}
+
+    for i in range(100):
+        candidate = f"{base_name}-{i}"
+        if candidate not in existing_branches:
+            return candidate
+    raise RuntimeError("You have too many dependency pr branches. Close some.")
+
 def get_default_branch_from_github(owner, repo_name, token):
     api_url = f"https://api.github.com/repos/{owner}/{repo_name}"
     headers = {"Authorization": f"token {token}"}
@@ -79,7 +90,7 @@ def main():
     repo.git.config("user.email", "github-actions[bot]@users.noreply.github.com")
     repo.git.config("user.name", "github-actions[bot]")
 
-    branch = f"bump-fetchcontent-{repo.head.commit.hexsha[:7]}"
+    branch = get_unique_branch_name(repo)
     repo.git.checkout("-b", branch)
     repo.git.add(A=True)
     repo.index.commit("chore: bump FetchContent dependencies")
